@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <!-- Single product version for assemblies, the UI and release scripts. -->
+    <Version>3.1.0</Version>
+    <AssemblyVersion>$(Version).0</AssemblyVersion>
+    <FileVersion>$(Version).0</FileVersion>
+    <Authors>MGHYGitHub</Authors>
+    <RepositoryUrl>https://github.com/MGHYGitHub/ClickFlow</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+</Project>
