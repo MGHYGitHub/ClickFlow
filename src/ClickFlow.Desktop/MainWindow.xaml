@@ -340,7 +340,7 @@
                                     <TextBlock Text="从一次点击开始，让它按你的节奏重复。" Style="{StaticResource Muted}" Margin="0,6,0,23" />
                                     <Grid>
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="22" /><ColumnDefinition Width="*" /><ColumnDefinition Width="22" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
-                                        <StackPanel><TextBlock Text="点击间隔 · 毫秒" Style="{StaticResource Label}" /><TextBox x:Name="QuickInterval" Text="100" AutomationProperties.Name="点击间隔（毫秒）" /><TextBlock Text="100 ms = 每秒约 10 次" FontSize="11" Style="{StaticResource Muted}" Margin="0,7,0,0" /></StackPanel>
+                                        <StackPanel><TextBlock Text="点击间隔 · 秒" Style="{StaticResource Label}" /><TextBox x:Name="QuickInterval" Text="0.1" AutomationProperties.Name="点击间隔（秒）" /><TextBlock Text="例如 0.1 秒 = 每秒约 10 次" FontSize="11" Style="{StaticResource Muted}" Margin="0,7,0,0" /></StackPanel>
                                         <StackPanel Grid.Column="2"><TextBlock Text="点击次数" Style="{StaticResource Label}" /><TextBox x:Name="QuickCount" Text="0" AutomationProperties.Name="点击次数" /><TextBlock Text="0 表示持续运行，直到停止" FontSize="11" Style="{StaticResource Muted}" Margin="0,7,0,0" /></StackPanel>
                                         <StackPanel Grid.Column="4"><TextBlock Text="鼠标按键" Style="{StaticResource Label}" /><ComboBox x:Name="QuickButton" SelectedIndex="0" AutomationProperties.Name="鼠标按键"><ComboBoxItem Content="左键" /><ComboBoxItem Content="右键" /><ComboBoxItem Content="中键" /></ComboBox><CheckBox x:Name="QuickDouble" Content="每次执行双击" Margin="0,12,0,0" /></StackPanel>
                                     </Grid>
@@ -382,9 +382,9 @@
                                 <DataGridTextColumn Header="步骤名称" Binding="{Binding Name}" Width="*" MinWidth="110" />
                                 <DataGridTextColumn Header="动作" Binding="{Binding Kind, Converter={StaticResource ActionLabel}}" IsReadOnly="True" Width="94" />
                                 <DataGridTextColumn Header="X" Binding="{Binding X}" Width="62" /><DataGridTextColumn Header="Y" Binding="{Binding Y}" Width="62" />
-                                <DataGridTextColumn Header="等待 ms" Binding="{Binding DelayMs}" Width="80" />
+                                <DataGridTextColumn Header="等待（秒）" Binding="{Binding DelayMs}" Width="80" />
                                 <DataGridTextColumn Header="次数" Binding="{Binding Count}" Width="58" />
-                                <DataGridTextColumn Header="间隔 ms" Binding="{Binding IntervalMs}" Width="80" />
+                                <DataGridTextColumn Header="间隔（秒）" Binding="{Binding IntervalMs}" Width="80" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
@@ -401,7 +401,7 @@
                     <WrapPanel Grid.Row="1" Margin="0,0,0,14"><Button Content="编辑选中步骤" Click="EditRecording_Click" Margin="0,0,8,0" /><Button Content="删除选中" Click="RemoveRecording_Click" Margin="0,0,8,0" /><Button Content="清空录制" Click="ClearRecording_Click" Foreground="{DynamicResource DangerBrush}" /></WrapPanel>
                     <Border Grid.Row="2" Style="{StaticResource Card}" Padding="0">
                         <DataGrid x:Name="RecordingGrid" IsReadOnly="True" Margin="1" AutomationProperties.Name="已录制操作">
-                            <DataGrid.Columns><DataGridTextColumn Header="步骤" Binding="{Binding Name}" Width="*" /><DataGridTextColumn Header="动作" Binding="{Binding Kind, Converter={StaticResource ActionLabel}}" Width="140" /><DataGridTextColumn Header="X" Binding="{Binding X}" Width="90" /><DataGridTextColumn Header="Y" Binding="{Binding Y}" Width="90" /><DataGridTextColumn Header="等待 ms" Binding="{Binding DelayMs}" Width="100" /></DataGrid.Columns>
+                            <DataGrid.Columns><DataGridTextColumn Header="步骤" Binding="{Binding Name}" Width="*" /><DataGridTextColumn Header="动作" Binding="{Binding Kind, Converter={StaticResource ActionLabel}}" Width="140" /><DataGridTextColumn Header="X" Binding="{Binding X}" Width="90" /><DataGridTextColumn Header="Y" Binding="{Binding Y}" Width="90" /><DataGridTextColumn Header="等待（秒）" Binding="{Binding DelayMs}" Width="100" /></DataGrid.Columns>
                         </DataGrid>
                     </Border>
                     <TextBlock Grid.Row="3" Text="录制鼠标与键盘操作，保留操作间隔。键盘记录仅在本地保存；结束后可逐项编辑，再开始回放。" Style="{StaticResource Muted}" FontSize="12" Margin="2,12,0,0" />
@@ -476,3 +476,4 @@
         </Grid>
     </Grid>
 </Window>
+

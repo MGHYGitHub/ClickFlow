@@ -112,19 +112,24 @@ public partial class MainWindow : Window
     {
         if(!int.TryParse(field.Text,out var n)||n<min||n>max)throw new FormatException($"{name}必须是 {min:N0}–{max:N0} 之间的整数。");return n;
     }
+    private static int ReadSeconds(TextBox field,string name,int min,int max)
+    {
+        if(!double.TryParse(field.Text,out var seconds)||seconds<0||seconds>max/1000d)throw new FormatException($"{name}必须是 0–{max/1000d:N3} 秒之间的数字。");
+        return (int)Math.Round(seconds*1000);
+    }
     private WorkflowDocument ReadDocument() => new() {
         Name=string.IsNullOrWhiteSpace(WorkflowName.Text)?"我的工作流":WorkflowName.Text.Trim(),Theme=DarkTheme.IsChecked==true?"Dark":"Light",
         Steps=_steps.Select(x=>x.Clone()).ToList(),Recording=_recording.Select(x=>x.Clone()).ToList(),
-        Quick=new QuickOptions { IntervalMs=ReadInt(QuickInterval,"点击间隔",0,PlanValidator.MaxDelayMs),Count=ReadInt(QuickCount,"点击次数",0,1000000),X=ReadInt(QuickX,"X 坐标",-1000000,1000000),Y=ReadInt(QuickY,"Y 坐标",-1000000,1000000),Button=(PointerButton)QuickButton.SelectedIndex,UseCurrentPosition=QuickCurrent.IsChecked==true,DoubleClick=QuickDouble.IsChecked==true },
-        Options=new RunOptions {RepeatCount=ReadInt(RepeatCount,"循环次数",0,1000000),StartDelayMs=ReadInt(StartDelay,"启动倒计时",0,PlanValidator.MaxDelayMs),CycleDelayMs=ReadInt(CycleDelay,"循环间隔",0,PlanValidator.MaxDelayMs),RandomOffset=ReadInt(RandomOffset,"坐标随机偏移",0,1000),RandomDelayMs=ReadInt(RandomDelay,"随机延时",0,60000),CornerFailSafe=CornerFailSafe.IsChecked==true}
+        Quick=new QuickOptions { IntervalMs=ReadSeconds(QuickInterval,"点击间隔",0,PlanValidator.MaxDelayMs),Count=ReadInt(QuickCount,"点击次数",0,1000000),X=ReadInt(QuickX,"X 坐标",-1000000,1000000),Y=ReadInt(QuickY,"Y 坐标",-1000000,1000000),Button=(PointerButton)QuickButton.SelectedIndex,UseCurrentPosition=QuickCurrent.IsChecked==true,DoubleClick=QuickDouble.IsChecked==true },
+        Options=new RunOptions {RepeatCount=ReadInt(RepeatCount,"循环次数",0,1000000),StartDelayMs=ReadSeconds(StartDelay,"启动延迟",0,PlanValidator.MaxDelayMs),CycleDelayMs=ReadSeconds(CycleDelay,"循环间隔",0,PlanValidator.MaxDelayMs),RandomOffset=ReadInt(RandomOffset,"坐标随机偏移",0,1000),RandomDelayMs=ReadSeconds(RandomDelay,"随机延时",0,60000),CornerFailSafe=CornerFailSafe.IsChecked==true}
     };
     private void ApplyDocument(WorkflowDocument d)
     {
         _loading=true;
         try {
             WorkflowName.Text=d.Name;_steps.Clear();foreach(var s in d.Steps)_steps.Add(s);_recording.Clear();foreach(var s in d.Recording)_recording.Add(s);
-            QuickInterval.Text=d.Quick.IntervalMs.ToString();QuickCount.Text=d.Quick.Count.ToString();QuickX.Text=d.Quick.X.ToString();QuickY.Text=d.Quick.Y.ToString();QuickCurrent.IsChecked=d.Quick.UseCurrentPosition;QuickDouble.IsChecked=d.Quick.DoubleClick;QuickButton.SelectedIndex=(int)d.Quick.Button;
-            RepeatCount.Text=d.Options.RepeatCount.ToString();StartDelay.Text=d.Options.StartDelayMs.ToString();CycleDelay.Text=d.Options.CycleDelayMs.ToString();RandomOffset.Text=d.Options.RandomOffset.ToString();RandomDelay.Text=d.Options.RandomDelayMs.ToString();CornerFailSafe.IsChecked=d.Options.CornerFailSafe;
+            QuickInterval.Text=(d.Quick.IntervalMs/1000d).ToString("0.###");QuickCount.Text=d.Quick.Count.ToString();QuickX.Text=d.Quick.X.ToString();QuickY.Text=d.Quick.Y.ToString();QuickCurrent.IsChecked=d.Quick.UseCurrentPosition;QuickDouble.IsChecked=d.Quick.DoubleClick;QuickButton.SelectedIndex=(int)d.Quick.Button;
+            RepeatCount.Text=d.Options.RepeatCount.ToString();StartDelay.Text=(d.Options.StartDelayMs/1000d).ToString("0.###");CycleDelay.Text=(d.Options.CycleDelayMs/1000d).ToString("0.###");RandomOffset.Text=d.Options.RandomOffset.ToString();RandomDelay.Text=(d.Options.RandomDelayMs/1000d).ToString("0.###");CornerFailSafe.IsChecked=d.Options.CornerFailSafe;
             DarkTheme.IsChecked=d.Theme=="Dark";ApplyTheme();RecordStatus.Text=$"已保存 {_recording.Count:N0} 个动作";
         } finally {_loading=false;}
     }
@@ -284,3 +289,5 @@ public partial class MainWindow : Window
         public void ReleaseAll(){}
     }
 }
+
+

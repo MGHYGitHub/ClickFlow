@@ -30,7 +30,7 @@ public sealed class StepEditor : Window
         _current=new CheckBox { Content="使用执行时的鼠标位置",IsChecked=step.UseCurrentPosition,Margin=new(0,0,0,12) };panel.Children.Add(_current);
         var xy=new Grid();xy.ColumnDefinitions.Add(new());xy.ColumnDefinitions.Add(new());var xp=new StackPanel{Margin=new(0,0,8,0)};var yp=new StackPanel{Margin=new(8,0,0,0)};Grid.SetColumn(yp,1);xy.Children.Add(xp);xy.Children.Add(yp);panel.Children.Add(xy);
         _x=Field(xp,"X · 屏幕像素",step.X);_y=Field(yp,"Y · 屏幕像素",step.Y);
-        _delay=Field(panel,"执行前等待（ms）",step.DelayMs);_count=Field(panel,"此步骤执行次数",step.Count);_interval=Field(panel,"重复执行间隔（ms）",step.IntervalMs);
+        _delay=Field(panel,"执行前等待（秒）",step.DelayMs/1000d);_count=Field(panel,"此步骤执行次数",step.Count);_interval=Field(panel,"重复执行间隔（秒）",step.IntervalMs/1000d);
         _wheel=Field(panel,"滚轮量（+120 向上，-120 向下）",step.WheelDelta);
         _keys=Field(panel,"键盘组合（例如 Ctrl+Shift+S）",step.Keys);
         _vk=Field(panel,"录制按键代码（Windows VK，1–254）",step.VirtualKey);
@@ -46,12 +46,13 @@ public sealed class StepEditor : Window
         _button.IsEnabled=k is ActionKind.Click or ActionKind.DoubleClick or ActionKind.MouseDown or ActionKind.MouseUp;
         _wheel.IsEnabled=k==ActionKind.Scroll;_keys.IsEnabled=k==ActionKind.Hotkey;_vk.IsEnabled=k is ActionKind.KeyDown or ActionKind.KeyUp;
     }
+    private double ParseDouble(TextBox t,string label) => double.TryParse(t.Text,out var n)&&n>=0?n:throw new FormatException(label+"必须是非负秒数。");
     private void Save(object sender,RoutedEventArgs e)
     {
         try
         {
             int Parse(TextBox t,string label) => int.TryParse(t.Text,out int n)?n:throw new FormatException(label+"必须是整数。");
-            Result=new ActionStep { Name=_name.Text.Trim(),Kind=(ActionKind)_kind.SelectedIndex,Button=(PointerButton)_button.SelectedIndex,UseCurrentPosition=_current.IsChecked==true,X=Parse(_x,"X"),Y=Parse(_y,"Y"),DelayMs=Parse(_delay,"等待"),Count=Parse(_count,"次数"),IntervalMs=Parse(_interval,"间隔"),WheelDelta=Parse(_wheel,"滚轮量"),Keys=_keys.Text.Trim(),VirtualKey=Parse(_vk,"按键代码"),Enabled=Result.Enabled };
+            Result=new ActionStep { Name=_name.Text.Trim(),Kind=(ActionKind)_kind.SelectedIndex,Button=(PointerButton)_button.SelectedIndex,UseCurrentPosition=_current.IsChecked==true,X=Parse(_x,"X"),Y=Parse(_y,"Y"),DelayMs=(int)Math.Round(ParseDouble(_delay,"等待")*1000),Count=Parse(_count,"次数"),IntervalMs=(int)Math.Round(ParseDouble(_interval,"间隔")*1000),WheelDelta=Parse(_wheel,"滚轮量"),Keys=_keys.Text.Trim(),VirtualKey=Parse(_vk,"按键代码"),Enabled=Result.Enabled };
             Result.Enabled=true;
             var error=PlanValidator.Validate(new ExecutionPlan([Result],new RunOptions{StartDelayMs=0}));if(error!=null)throw new FormatException(error);
             Result.Enabled=_enabled.IsChecked==true;
@@ -60,3 +61,6 @@ public sealed class StepEditor : Window
         catch(Exception ex) { _error.Text=ex.Message; }
     }
 }
+
+
+
