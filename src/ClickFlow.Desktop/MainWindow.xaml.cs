@@ -203,6 +203,23 @@ public partial class MainWindow : Window
         if(!CanEdit())return;var p=_input.GetCursorPosition();var editor=new StepEditor(this,new(){Name=$"步骤 {_steps.Count+1}",X=p.X,Y=p.Y});if(editor.ShowDialog()==true){_steps.Add(editor.Result);StepsGrid.SelectedIndex=_steps.Count-1;}
     }
     private void EditStep_Click(object sender,RoutedEventArgs e) => EditSelected(StepsGrid,_steps);
+    private void Guide_Click(object sender, RoutedEventArgs e)
+    {
+        if (!CanEdit()) return;
+        var steps = StepsGrid.SelectedItems.OfType<ActionStep>().ToList();
+        if (steps.Count == 0) steps = _steps.ToList();
+        new GuideOverlayWindow(this, steps).ShowDialog();
+    }
+    private void BatchEdit_Click(object sender, RoutedEventArgs e)
+    {
+        if (!CanEdit()) return;
+        var selected = StepsGrid.SelectedItems.OfType<ActionStep>().ToList();
+        if (selected.Count == 0) { StatusText.Text = "请先在步骤列表中多选至少一个步骤。"; return; }
+        var editor = new BatchStepEditor(this, selected.Count);
+        if (editor.ShowDialog() != true) return;
+        foreach (var step in selected) { if (editor.DelayMs is int delay) step.DelayMs = delay; if (editor.Count is int count) step.Count = count; if (editor.IntervalMs is int interval) step.IntervalMs = interval; }
+        StepsGrid.Items.Refresh(); QueueSave(); StatusText.Text = $"已批量更新 {selected.Count} 个步骤。"; Log(StatusText.Text);
+    }
     private void EditRecording_Click(object sender,RoutedEventArgs e) => EditSelected(RecordingGrid,_recording);
     private void EditSelected(DataGrid grid,ObservableCollection<ActionStep> list)
     {

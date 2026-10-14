@@ -369,12 +369,14 @@
                     <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
                     <WrapPanel Margin="0,0,0,14">
                         <Button Content="＋ 添加步骤" Style="{StaticResource PrimaryButton}" Click="AddStep_Click" Margin="0,0,8,6" />
+                        <Button Content="点位引导" Click="Guide_Click" Margin="0,0,8,6" ToolTip="全屏显示固定坐标点位及执行顺序" />
+                        <Button Content="批量设置" Click="BatchEdit_Click" Margin="0,0,8,6" ToolTip="对多选步骤设置等待、次数和间隔" />
                         <Button Content="编辑" Click="EditStep_Click" Margin="0,0,8,6" /><Button Content="复制" Click="DuplicateStep_Click" Margin="0,0,8,6" />
                         <Button Content="上移" Click="MoveUp_Click" Margin="0,0,8,6" /><Button Content="下移" Click="MoveDown_Click" Margin="0,0,8,6" />
                         <Button Content="删除" Click="RemoveStep_Click" Foreground="{DynamicResource DangerBrush}" Margin="0,0,0,6" />
                     </WrapPanel>
                     <Border Grid.Row="1" Style="{StaticResource Card}" Padding="0" ClipToBounds="True">
-                        <DataGrid x:Name="StepsGrid" Margin="1" AutomationProperties.Name="自动化步骤">
+                        <DataGrid x:Name="StepsGrid" Margin="1" SelectionMode="Extended" SelectionUnit="FullRow" AutomationProperties.Name="自动化步骤">
                             <DataGrid.Columns>
                                 <DataGridCheckBoxColumn Header="启用" Binding="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="54" />
                                 <DataGridTextColumn Header="步骤名称" Binding="{Binding Name}" Width="*" MinWidth="110" />
