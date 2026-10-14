@@ -231,7 +231,16 @@ public partial class MainWindow : Window
         if(!CanEdit()||grid.SelectedItem is not ActionStep step)return;var editor=new StepEditor(this,step);int index=list.IndexOf(step);if(editor.ShowDialog()==true){list[index]=editor.Result;grid.SelectedIndex=index;QueueSave();}
     }
     private void DuplicateStep_Click(object sender,RoutedEventArgs e) {if(!CanEdit()||StepsGrid.SelectedItem is not ActionStep s)return;var clone=s.Clone();clone.Name+=" 副本";_steps.Insert(_steps.IndexOf(s)+1,clone);StepsGrid.SelectedItem=clone;}
-    private void RemoveStep_Click(object sender,RoutedEventArgs e) {if(CanEdit()&&StepsGrid.SelectedItem is ActionStep s)_steps.Remove(s);}
+    private void RemoveStep_Click(object sender,RoutedEventArgs e)
+    {
+        if(!CanEdit())return;
+        var selected=StepsGrid.SelectedItems.OfType<ActionStep>().ToList();
+        if(selected.Count==0){StatusText.Text="请先选择要删除的步骤。";return;}
+        var message=selected.Count==1?$"确定删除步骤“{selected[0].Name}”？":$"确定删除选中的 {selected.Count} 个步骤？";
+        if(MessageBox.Show(this,message,"删除步骤",MessageBoxButton.YesNo,MessageBoxImage.Warning)!=MessageBoxResult.Yes)return;
+        foreach(var step in selected)_steps.Remove(step);
+        QueueSave();StatusText.Text=$"已删除 {selected.Count} 个步骤。";Log(StatusText.Text);
+    }
     private void RemoveRecording_Click(object sender,RoutedEventArgs e) {if(CanEdit()&&RecordingGrid.SelectedItem is ActionStep s)_recording.Remove(s);}
     private void MoveUp_Click(object sender,RoutedEventArgs e)=>Move(-1);
     private void MoveDown_Click(object sender,RoutedEventArgs e)=>Move(1);
@@ -289,5 +298,6 @@ public partial class MainWindow : Window
         public void ReleaseAll(){}
     }
 }
+
 
 
