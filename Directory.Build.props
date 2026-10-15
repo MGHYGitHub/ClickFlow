@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Single product version for assemblies, the UI and release scripts. -->
-    <Version>3.3.2</Version>
+    <Version>3.3.3</Version>
     <AssemblyVersion>$(Version).0</AssemblyVersion>
     <FileVersion>$(Version).0</FileVersion>
     <Authors>MGHYGitHub</Authors>
@@ -11,6 +11,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 </Project>
+
 
 
 
