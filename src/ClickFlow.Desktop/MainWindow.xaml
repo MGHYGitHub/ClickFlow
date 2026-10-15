@@ -429,12 +429,12 @@
                                 <StackPanel><TextBlock Text="运行节奏" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,20" />
                                     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
                                         <StackPanel><TextBlock Text="流程循环次数" Style="{StaticResource Label}" /><TextBox x:Name="RepeatCount" Text="1" /><TextBlock Text="0 = 持续循环" Style="{StaticResource Muted}" FontSize="11" Margin="0,6,0,0" /></StackPanel>
-                                        <StackPanel Grid.Column="2"><TextBlock Text="启动延迟 · 毫秒" Style="{StaticResource Label}" /><TextBox x:Name="StartDelay" Text="3000" /><TextBlock Text="默认 3 秒，方便切换窗口" Style="{StaticResource Muted}" FontSize="11" Margin="0,6,0,0" /></StackPanel>
-                                        <StackPanel Grid.Column="4"><TextBlock Text="循环间隔 · 毫秒" Style="{StaticResource Label}" /><TextBox x:Name="CycleDelay" Text="100" /></StackPanel>
+                                        <StackPanel Grid.Column="2"><TextBlock Text="启动延迟 · 秒" Style="{StaticResource Label}" /><TextBox x:Name="StartDelay" Text="3" /><TextBlock Text="默认 3 秒，方便切换窗口" Style="{StaticResource Muted}" FontSize="11" Margin="0,6,0,0" /></StackPanel>
+                                        <StackPanel Grid.Column="4"><TextBlock Text="循环间隔 · 秒" Style="{StaticResource Label}" /><TextBox x:Name="CycleDelay" Text="0.1" /></StackPanel>
                                     </Grid>
                                     <Grid Margin="0,22,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
                                         <StackPanel><TextBlock Text="坐标随机偏移 · 像素" Style="{StaticResource Label}" /><TextBox x:Name="RandomOffset" Text="0" /></StackPanel>
-                                        <StackPanel Grid.Column="2"><TextBlock Text="额外随机延迟 · 毫秒" Style="{StaticResource Label}" /><TextBox x:Name="RandomDelay" Text="0" /></StackPanel>
+                                        <StackPanel Grid.Column="2"><TextBlock Text="额外随机延迟 · 秒" Style="{StaticResource Label}" /><TextBox x:Name="RandomDelay" Text="0" /></StackPanel>
                                     </Grid>
                                 </StackPanel>
                             </Border>
@@ -476,4 +476,5 @@
         </Grid>
     </Grid>
 </Window>
+
 
